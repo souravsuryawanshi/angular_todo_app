@@ -1,0 +1,30 @@
+<div class="input">
+  <input [(ngModel)]="todo" placeholder="Enter work to do..." autofocus/>
+</div>
+
+<button class="add"(click)="addWork(todo)">
+  Add
+</button>
+
+
+<div *ngFor="let item of work; let i = index">
+
+  <div class="items">
+
+    <span class="item">
+     {{ item | titlecase}}
+     </span>
+
+    <button class="remove"(click)="markDone(i)">
+      Done!
+    </button>
+
+  </div>
+
+</div>
+
+<button *ngIf="work.length>0"
+  class="clear"
+  (click)="clearList()">
+  All Done!
+</button>
