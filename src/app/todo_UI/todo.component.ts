@@ -1,4 +1,6 @@
+import { Router, RouterModule } from '@angular/router';
 import { Component } from '@angular/core';
+import { TodoService } from '../Services/todos.service';
 
 @Component({
   selector: 'app-todo',
@@ -6,24 +8,54 @@ import { Component } from '@angular/core';
   styleUrls: ['./todo.component.scss'],
 })
 export class TodoComponent {
+  //variables block
   todo: string = '';
   work: any = [];
 
-  addWork(work: any) {
-    if (work) {
-      this.work.push(work);
+  //constructor and ngOnInit
+
+  constructor(private _todos: TodoService, private _route: Router) {}
+
+  ngOnInit() {
+    this.work = this._todos.getTodos();
+    console.log('%c sourav suryawanshi', 'color : red');
+  }
+
+  //Action Handlers
+
+  addWork(item: any) {
+    if (item) {
+      this._todos.addTodos({
+        todo: item,
+        date: this._todos.getDate(),
+        time: this._todos.getTime(),
+      });
+      this._route
+        .navigateByUrl('refresh', { skipLocationChange: true })
+        .then(() => {
+          this._route.navigateByUrl('');
+        });
       this.todo = '';
-      this.work.sort();
     } else {
-      alert('Please add todo work');
+      alert('Please add todo!');
     }
   }
 
   markDone(i: any) {
-    this.work.splice(i, 1);
+    this._todos.removeTodos(this.work.length - i - 1);
+    this._route
+      .navigateByUrl('refresh', { skipLocationChange: true })
+      .then(() => {
+        this._route.navigateByUrl('');
+      });
   }
 
   clearList() {
-    this.work.splice(0, this.work.length);
+    this._todos.clearAllTodos();
+    this._route
+      .navigateByUrl('refresh', { skipLocationChange: true })
+      .then(() => {
+        this._route.navigateByUrl('');
+      });
   }
 }

@@ -1,26 +1,28 @@
 <div class="input">
-  <input [(ngModel)]="todo" placeholder="Enter work to do..." autofocus/>
+  <input [(ngModel)]="todo" placeholder="Enter work to do..."  (keyup.enter)="addWork(todo)" [autofocus] = "true"/>
 </div>
 
-<button class="add"(click)="addWork(todo)">
+<button class="add"(click)="addWork(todo)" [disabled]="todo.length < 1">
   Add
 </button>
 
 
-<div *ngFor="let item of work; let i = index">
+<div *ngFor="let item of work.slice().reverse(); let i = index">
 
   <div class="items">
 
     <span class="item">
-     {{ item | titlecase}}
+     {{ item.todo | titlecase}}
+
      </span>
 
-    <button class="remove"(click)="markDone(i)">
+    <button class="remove"(click)="markDone(i)" >
       Done!
     </button>
 
   </div>
-
+<span> {{item.date}}</span>
+<span> {{item.time}}</span>
 </div>
 
 <button *ngIf="work.length>0"
